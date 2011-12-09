@@ -24,7 +24,7 @@
 #  http://www.ksworks.org/2011/11/ruby-upload-evenote-with-jpeg.html
 #  http://www.ksworks.org/2011/11/ruby-de-evernote-attributes.html
 #  http://www.ksworks.org/2011/11/ruby-de-jpegexif-to-ennoteattr.html
-#  http://www.ksworks.org/2011/11/edamtestrb.html
+#  http://www.ksworks.org/2011/11/remove-warn-in-edamtest-ruby.html
 #  http://www.ksworks.org/2011/12/xxxx (now writing...)
 #
 #  Authors:: Ken AKASHI <ks at ksworks.org>
@@ -43,6 +43,9 @@ $NoteTitleFormat = '%Y-%m-%d(%a) %H:%M:%S %Z'
 
 # ノート情報登録成功時に通知をするか?
 $NotifySuccessed = true
+
+# ノート情報登録成功時に元ファイルを削除するか?
+$RemoveFileSuccessed = false
 
 # EVERNOTE保存先ノートブック名(デフォルトで良ければコメントアウト)
 $ENStoreNotebookName = 'testnotebook'
@@ -347,6 +350,10 @@ end
 # == Evernote Note Resource Module
 #  ノートのリソース情報モジュール
 #
+# USAGE:
+#  getContent  :: encContentを実行(あれば)して@contentを返す
+#  getResource :: encResourceを実行(あれば)して@resourceを返す
+#
 module ENResource
   #
   # === リソース情報Content取得
@@ -355,7 +362,8 @@ module ENResource
   #  String
   #
   def getContent
-    return nil
+    self.encContent if defined? self.encContent
+    return @content
   end
 
   #
@@ -365,7 +373,8 @@ module ENResource
   #  Evernote::EDAM::Type::Resource
   #
   def getResource
-    return nil
+    self.encResource if defined? self.encResource
+    return @resource
   end
 end
 
@@ -402,23 +411,11 @@ class ENImageResource
   end
 
   #
-  # === ノートのContent情報を取得
+  # === ノートのContent情報を整形
   #  自分の持っているリソースの<en-media>タグ情報を生成する
-  # RETVAL:
-  #  String
   #
-  def getContent
-    return '<en-media type="' + @mime + '" hash="' + @hash + '"/><br/>'
-  end
-
-  #
-  # === ノートのContent情報を取得
-  #  自分の持っているリソースの<en-media>タグ情報を生成する
-  # RETVAL:
-  #  Evernote::EDAM::Type::Resource
-  #
-  def getResource
-    return @resource
+  def encContent
+    @content = '<en-media type="' + @mime + '" hash="' + @hash + '"/><br/>'
   end
 end
 
@@ -608,6 +605,7 @@ begin
     edam.createNote(note)
 
     notify(false, $ScriptName, "#{entry.basename} is Added to Evernote.") if $NotifySuccessed
+    File.delete(fname) if $RemoveFileSuccessed
   }
 rescue => e
   notify(true, "Error:#{$ScriptName}", e.to_s)
