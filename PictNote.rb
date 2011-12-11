@@ -38,7 +38,7 @@ $ScriptName = 'PictNote[Ruby]'
 # ---- CONFIG BEGIN ----
 #
 
-# タイトル設定時の時刻情報フォーマット (strffmt)
+# タイトル設定時の時刻情報フォーマット (strftime)
 $NoteTitleFormat = '%Y-%m-%d(%a) %H:%M:%S %Z'
 
 # ノート情報登録成功時に通知をするか?
