@@ -25,7 +25,7 @@
 #  http://www.ksworks.org/2011/11/ruby-de-evernote-attributes.html
 #  http://www.ksworks.org/2011/11/ruby-de-jpegexif-to-ennoteattr.html
 #  http://www.ksworks.org/2011/11/remove-warn-in-edamtest-ruby.html
-#  http://www.ksworks.org/2011/12/xxxx (now writing...)
+#  http://www.ksworks.org/2011/12/photostream-to-evernote-upload.html
 #
 #  Authors:: Ken AKASHI <ks at ksworks.org>
 #  Version:: 2011-12-08
@@ -578,17 +578,18 @@ end
 #
 # - MAIN -
 #
-if ARGV.size < 1 then
-  notify(true, "Error:#{$ScriptName}", "Usage error: File not specified.")
-  exit(1)
-end
 begin
+  if ARGV.size < 1 then
+    raise("Usage error: File not specified.")
+  end
+
   edam = EdamApiMng.new
   notebook = edam.selectNotebook($ENStoreNotebookName) unless $ENStoreNotebookName.nil?
   unless $ENStoreTagName.nil? then
     tags = Array.new
     $ENStoreTagName.each { |tag|
-      tags << edam.selectTag(tag)
+      t = edam.selectTag(tag)
+      tags << t unless t.nil?
     }
   end
 
@@ -599,7 +600,7 @@ begin
     note = ENNote.new
     note.setNotebook(notebook) unless notebook.nil?
     tags.each { |tag|
-      note.setTags(tag)
+      note.setTags(tag) unless tag.nil?
     } unless tags.nil?
     entry.toNote(note)
     edam.createNote(note)
@@ -608,5 +609,5 @@ begin
     File.delete(fname) if $RemoveFileSuccessed
   }
 rescue => e
-  notify(true, "Error:#{$ScriptName}", e.to_s)
+  notify(true, "Error:#{$ScriptName}", e.to_s + e.backtrace.to_s)
 end
