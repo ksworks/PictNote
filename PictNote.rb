@@ -26,6 +26,7 @@
 #  http://www.ksworks.org/2011/11/ruby-de-jpegexif-to-ennoteattr.html
 #  http://www.ksworks.org/2011/11/remove-warn-in-edamtest-ruby.html
 #  http://www.ksworks.org/2011/12/photostream-to-evernote-upload.html
+#  http://www.ksworks.org/2012/02/snowleopard-de-ruby-to-evernote.html
 #
 #  Authors:: Ken AKASHI <ks at ksworks.org>
 #  Version:: 2011-12-08
@@ -60,14 +61,14 @@ $EvernoteUsername = 'username'
 $EvernotePassword = 'password'
 
 # EVERNOTE API Consumer Key
-$EvernoteConsumerKey = 'en-edamtest'
+$EvernoteConsumerKey = 'ksworks-2316'
 
 # EVERNOTE API Consumer Key
-$EvernoteConsumerSecret = '0123456789abcdef'
+$EvernoteConsumerSecret = 'b4a5f9fdc025486b'
 
 # EVERNOTE API Hostname
-$EvernoteHost = 'sandbox.evernote.com'
-#$EvernoteHost = 'www.evernote.com'
+#$EvernoteHost = 'sandbox.evernote.com'
+$EvernoteHost = 'www.evernote.com'
 
 # EVERNOTE API installed directories.
 $LOAD_PATH.push("/usr/lib/site_ruby")
